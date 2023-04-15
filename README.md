@@ -26,4 +26,4 @@ Tutorial project to learn FastAPI and JWT authentication &amp; authorization
     -   `CLIENT_ORIGIN=<client-host-and-port>`
     -   `JWT_PRIVATE_KEY=<base64-encoded-rsa-private-key>`
     -   `JWT_PUBLIC_KEY=<base64-encoded-rsa-public-key>`
--   Run `uvicorn app.main:app --host localhost --port 8000 --reload`
+-   Run `uvicorn app.main:app --host localhost --port 8000 --reload` to start the server
