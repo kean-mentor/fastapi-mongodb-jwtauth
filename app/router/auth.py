@@ -1,10 +1,11 @@
-from datetime import datetime
-from fastapi import APIRouter, HTTPException, status
+from datetime import datetime, timedelta
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 
-from app.config import settings
 from app import schemas, utils
+from app.config import settings
 from app.database import User
-from app.serializers.userSerializers import userResponseEntity
+from app.oauth2 import AuthJWT
+from app.serializers.userSerializers import userEntity, userResponseEntity
 
 
 router = APIRouter()
@@ -40,3 +41,66 @@ async def create_user(payload: schemas.CreateUserSchema):
     new_user = userResponseEntity(User.find_one({"_id": result.inserted_id}))
 
     return {"status": "success", "user": new_user}
+
+
+@router.post("/login")
+def login(
+    payload: schemas.LoginUserSchema, response: Response, authorize: AuthJWT = Depends()
+):
+    db_user = User.find_one({"email": payload.email.lower()})
+    if not db_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect Email or Password",
+        )
+
+    user = userEntity(db_user)
+    if not utils.verify_password(payload.password, user["password"]):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect Email or Password",
+        )
+
+    access_token = authorize.create_access_token(
+        subject=str(user["id"]), expires_time=timedelta(minutes=ACCESS_TOKEN_EXPIRES_IN)
+    )
+    refresh_token = authorize.create_refresh_token(
+        subject=str(user["id"]),
+        expires_time=timedelta(minutes=REFRESH_TOKEN_EXPIRES_IN),
+    )
+
+    response.set_cookie(
+        "access_token",
+        access_token,
+        ACCESS_TOKEN_EXPIRES_IN * 60,
+        ACCESS_TOKEN_EXPIRES_IN * 60,
+        "/",
+        None,
+        False,
+        True,
+        "lax",
+    )
+    response.set_cookie(
+        "refresh_token",
+        refresh_token,
+        REFRESH_TOKEN_EXPIRES_IN * 60,
+        REFRESH_TOKEN_EXPIRES_IN * 60,
+        "/",
+        None,
+        False,
+        True,
+        "lax",
+    )
+    response.set_cookie(
+        "logged_in",
+        "True",
+        ACCESS_TOKEN_EXPIRES_IN * 60,
+        ACCESS_TOKEN_EXPIRES_IN * 60,
+        "/",
+        None,
+        False,
+        False,
+        "lax",
+    )
+
+    return {"status": "success", "access_token": access_token}
