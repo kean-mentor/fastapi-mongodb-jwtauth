@@ -2,6 +2,11 @@
 
 Tutorial project to learn FastAPI and JWT authentication &amp; authorization
 
+### Sources
+- https://codevoweb.com/api-with-python-fastapi-and-mongodb-jwt-authentication/
+- https://docs.pydantic.dev/
+- https://pymongo.readthedocs.io/en/stable/index.html
+
 ### Starting MongoDB server
 
 -   Edit `docker-compose.yml` if you want
