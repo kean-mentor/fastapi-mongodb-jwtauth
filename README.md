@@ -1,6 +1,6 @@
 # fastapi-mongodb-jwtauth
 
-Tutorial project to learn FastAPI and JWT authentication &amp; authorization
+Tutorial project to learn FastAPI and cookie based JWT authentication &amp; authorization
 
 ### Starting MongoDB server
 
