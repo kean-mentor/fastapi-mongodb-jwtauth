@@ -2,11 +2,6 @@
 
 Tutorial project to learn FastAPI and JWT authentication &amp; authorization
 
-### Sources
-- https://codevoweb.com/api-with-python-fastapi-and-mongodb-jwt-authentication/
-- https://docs.pydantic.dev/
-- https://pymongo.readthedocs.io/en/stable/index.html
-
 ### Starting MongoDB server
 
 -   Edit `docker-compose.yml` if you want
@@ -20,10 +15,18 @@ Tutorial project to learn FastAPI and JWT authentication &amp; authorization
 
 -   Add the following entries to the `.env` file:
     -   `DATABASE_URL=<mongo-db-connection-string>`
-    -   `ACCESS_TOKEN_EXPIRES_IN=<token-expiration-in-seconds>`
-    -   `REFRESH_TOKEN_EXPIRES_IN=<token-expiration-in-seconds>`
+    -   `ACCESS_TOKEN_EXPIRES_IN=<token-expiration-in-minutes>`
+    -   `REFRESH_TOKEN_EXPIRES_IN=<token-expiration-in-minutes>`
     -   `JWT_ALGORITHM=<jwt-algorithm>`
     -   `CLIENT_ORIGIN=<client-host-and-port>`
     -   `JWT_PRIVATE_KEY=<base64-encoded-rsa-private-key>`
     -   `JWT_PUBLIC_KEY=<base64-encoded-rsa-public-key>`
 -   Run `uvicorn app.main:app --host localhost --port 8000 --reload` to start the server
+
+### Sources
+1. https://jwt.io/introduction
+2. https://codevoweb.com/api-with-python-fastapi-and-mongodb-jwt-authentication/
+3. https://indominusbyte.github.io/fastapi-jwt-auth/
+4. https://docs.pydantic.dev/
+5. https://fastapi.tiangolo.com/
+6. https://pymongo.readthedocs.io/en/stable/index.html
