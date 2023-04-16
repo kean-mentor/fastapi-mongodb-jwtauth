@@ -3,6 +3,7 @@ from bson import ObjectId
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 
 from app import schemas, utils
+from app import oauth2
 from app.config import settings
 from app.database import User
 from app.oauth2 import AuthJWT
@@ -166,7 +167,11 @@ def refresh_token(response: Response, authorize: AuthJWT = Depends()):
 
 
 @router.get("/logout", status_code=status.HTTP_200_OK)
-def logout(response: Response, authorize: AuthJWT = Depends()):
+def logout(
+    response: Response,
+    authorize: AuthJWT = Depends(),
+    user_id: str = Depends(oauth2.require_user),
+):
     authorize.unset_jwt_cookies()
     response.set_cookie("logged_in", "", -1)
 
